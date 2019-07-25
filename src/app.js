@@ -19,12 +19,17 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(authRouter);
 
 // Catchalls
 app.use(notFound);
 app.use(errorHandler);
 
 let isRunning = false;
+
+app.get('/test', (req,res) => {
+  res.status(200).send('ALL GOOD');
+});
 
 module.exports = {
   server: app,
