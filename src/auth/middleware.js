@@ -6,13 +6,13 @@ module.exports = (req, res, next) => {
 
   try {
 
-    let [authType, encodedString] = req.headers.authorization.split(/\s+/);
-    console.log('authType:',authType, 'encodedString:',encodedString);
+    let [authType, authString] = req.headers.authorization.split(/\s+/);
+
     // BASIC Auth  ... Authorization:Basic ZnJlZDpzYW1wbGU=
 
     switch(authType.toLowerCase()) {
     case 'basic':
-      return _authBasic(encodedString);
+      return _authBasic(authString);
     default:
       return _authError();
     }
@@ -33,6 +33,8 @@ module.exports = (req, res, next) => {
 
   function _authenticate(user) {
     if ( user ) {
+      req.user = user;
+      req.token = user.generateToken();
       next();
     }
     else {
